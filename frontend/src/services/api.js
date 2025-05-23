@@ -136,4 +136,16 @@ export const generateStoryColoringPage = async (storyId) => {
   }
 };
 
+export const generateActivityForStory = async (storyId, activityType) => {
+  try {
+    const response = await apiClient.post(`/stories_api/${storyId}/generate-activity`, {
+      activity_type: activityType,
+    });
+    return response.data; // Expected: { activity_text: "..." }
+  } catch (error) {
+    console.error(`Generate activity for story ID (${storyId}, type: ${activityType}) error:`, error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
 export default apiClient; // Export the configured client if needed elsewhere, or just use functions

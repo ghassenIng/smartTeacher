@@ -5,7 +5,12 @@ from typing import List, Dict
 from .. import crud, models, schemas
 from ..database import SessionLocal
 from ..dependencies import get_current_active_user
-from ..services.gemini_service import generate_story_title_and_draft, generate_image_for_story, generate_coloring_page_for_story # Import new service
+from ..services.gemini_service import (
+    generate_story_title_and_draft, 
+    generate_image_for_story, 
+    generate_coloring_page_for_story,
+    generate_pedagogical_activity # Import new service
+)
 
 router = APIRouter()
 
@@ -119,3 +124,26 @@ async def generate_story_coloring_page_endpoint(
     except Exception as e:
         # Log the exception e
         raise HTTPException(status_code=500, detail=f"Failed to generate coloring page: {str(e)}")
+
+@router.post("/stories_api/{story_id}/generate-activity", response_model=Dict[str, str])
+async def generate_story_activity_endpoint(
+    story_id: int,
+    activity_request: schemas.ActivityRequest, # Use the new schema
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(get_current_active_user)
+):
+    db_story = crud.get_story(db, story_id=story_id, owner_id=current_user.id)
+    if db_story is None:
+        raise HTTPException(status_code=404, detail="Story not found or not owned by user")
+
+    try:
+        activity_text = generate_pedagogical_activity(
+            story_content=db_story.content, 
+            activity_type=activity_request.activity_type
+        )
+        if activity_text is None: # Should not happen with placeholder, but good for real API
+            raise HTTPException(status_code=500, detail="Failed to generate pedagogical activity")
+        return {"activity_text": activity_text}
+    except Exception as e:
+        # Log the exception e
+        raise HTTPException(status_code=500, detail=f"Failed to generate pedagogical activity: {str(e)}")

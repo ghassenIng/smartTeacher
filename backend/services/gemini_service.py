@@ -66,3 +66,43 @@ def generate_coloring_page_for_story(story_content: str) -> str:
     """
     # print(f"Simulating coloring page generation for story content (first 100 chars): {story_content[:100]}")
     return "https://via.placeholder.com/600x400.png?text=Coloring+Page+Image"
+
+def generate_pedagogical_activity(story_content: str, activity_type: str) -> str:
+    """
+    Simulates generating a pedagogical activity based on the story content and activity type.
+    Returns a placeholder text description for the activity.
+    """
+    # In a real application, this would involve constructing specific prompts for each activity_type
+    # and calling the Gemini API. For now, we return a placeholder.
+    
+    # Shorten story_content for the placeholder to keep it manageable
+    short_story_snippet = story_content[:75] + "..." if len(story_content) > 75 else story_content
+
+    placeholder_text = f"This is a placeholder for a '{activity_type}' activity based on the story: '{short_story_snippet}'. [Simulated AI Content for {activity_type}]"
+    
+    # Example of how one might structure different placeholders if needed:
+    if activity_type == "Imla":
+        placeholder_text = f"إملاء مقترح (Placeholder): The quick brown fox jumps over the lazy dog. Based on '{short_story_snippet}'."
+    elif activity_type == "Text Comprehension":
+        placeholder_text = (
+            f"أسئلة فهم النص (Placeholder):\n"
+            f"1. Who is the main character in the story about '{short_story_snippet}'?\n"
+            f"2. What was the biggest challenge they faced?\n"
+            f"3. How was the story resolved?"
+        )
+    elif activity_type == "Multiple Choice":
+        placeholder_text = (
+            f"أسئلة اختيار متعدد (Placeholder) for story '{short_story_snippet}':\n"
+            f"1. What color was the cat? (a) Red (b) Blue (c) Black. Correct: (c)\n"
+            f"2. Where did the story take place? (a) Forest (b) City (c) Space. Correct: (a)"
+        )
+    elif activity_type == "Connecting Ideas":
+        placeholder_text = (
+            f"نشاط توصيل الأفكار (Placeholder) for story '{short_story_snippet}':\n"
+            f"Match the character to their favorite food:\n"
+            f"Character A --- Option 1: Apples\n"
+            f"Character B --- Option 2: Bananas\n"
+            f"(Correct matches would be determined by AI from story)"
+        )
+    
+    return placeholder_text

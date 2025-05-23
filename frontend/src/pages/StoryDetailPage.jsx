@@ -4,8 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Import Select
 import { toast } from "sonner";
-import { fetchStoryById, updateStoryById, generateStoryImage, generateStoryColoringPage } from '../../services/api'; // Import generateStoryColoringPage
+import { 
+  fetchStoryById, 
+  updateStoryById, 
+  generateStoryImage, 
+  generateStoryColoringPage,
+  generateActivityForStory // Import generateActivityForStory
+} from '../../services/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 
 export function StoryDetailPage() {
@@ -24,11 +31,17 @@ export function StoryDetailPage() {
   const [coloringImageUrl, setColoringImageUrl] = useState('');
   const [isColoringImageLoading, setIsColoringImageLoading] = useState(false);
 
+  const [selectedActivityType, setSelectedActivityType] = useState('');
+  const [generatedActivityText, setGeneratedActivityText] = useState('');
+  const [isActivityLoading, setIsActivityLoading] = useState(false);
+
   useEffect(() => {
     const loadStory = async () => {
       setIsLoading(true);
       setStoryImageUrl(''); 
-      setColoringImageUrl(''); // Reset coloring page URL
+      setColoringImageUrl('');
+      setGeneratedActivityText(''); // Reset activity text
+      setSelectedActivityType(''); // Reset selected activity type
       try {
         const fetchedStory = await fetchStoryById(storyId);
         setStory(fetchedStory);

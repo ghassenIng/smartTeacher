@@ -20,6 +20,9 @@ class StoryPromptDetails(BaseModel):
     hero_name: str
     age_group: str
 
+class ActivityRequest(BaseModel):
+    activity_type: str
+
 class UserBase(BaseModel):
     email: str
 
